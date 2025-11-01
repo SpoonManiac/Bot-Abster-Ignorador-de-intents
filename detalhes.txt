@@ -1,0 +1,9 @@
+Bot está definido para ignorar 11 intents por ciclo
+    - Demora em torno de 28s para completar 1 ciclo
+    - Faz mais ou menos 56 intents em 1min
+
+Bot tem alguns bugs ao fazer o scroll, arrumando isso melhora o tempo de execução
+    - faz scroll e ele começa a errar alguns ignore, clica nos já clicados as vezes
+    por algum motivo erra o clicar em alguns q nao foram clicados
+
+em 1h ignora em torno de 3,360 arquivos
