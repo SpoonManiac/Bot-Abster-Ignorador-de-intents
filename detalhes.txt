@@ -6,4 +6,4 @@ Bot tem alguns bugs ao fazer o scroll, arrumando isso melhora o tempo de execuç
     - faz scroll e ele começa a errar alguns ignore, clica nos já clicados as vezes
     por algum motivo erra o clicar em alguns q nao foram clicados
 
-em 1h ignora em torno de 3,360 arquivos
+em 1h ignora em torno de 128 ciclos com um total de 1,408 arquivos
