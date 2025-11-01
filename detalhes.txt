@@ -7,3 +7,8 @@ Bot tem alguns bugs ao fazer o scroll, arrumando isso melhora o tempo de execuç
     por algum motivo erra o clicar em alguns q nao foram clicados
 
 em 1h ignora em torno de 128 ciclos com um total de 1,408 arquivos
+
+
+
+
+APOS O 7° (COM O ZOOM DE 50% MANUALMENTE) ELE COMEÇA A PULAR 2, NO 8° PULA 3, 9° PULA 4
