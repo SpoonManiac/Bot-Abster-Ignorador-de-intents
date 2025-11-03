@@ -145,11 +145,11 @@ def run(playwright):
         delta = get_apply_count(page) - start_count
         if delta > 0:
             print(f"\n💾 {ciclo}° ciclo concluído — {delta} intents adicionadas ao Apply.")
-            print(f"Total acumulado no botão Apply: {get_apply_count(page)}")
+            print(f"\n🏁 Total de intents ignoradas desde o início: {total_ignored * ciclo}")
             apply_changes(page)
         else:
             print(f"⚠️ Nenhuma intent nova para aplicar no {ciclo}° ciclo.")
-            print(f"\n🏁 Total de intents ignoradas desde o início: {total_ignored}")
+            print(f"\n🏁 Total de intents ignoradas desde o início: {total_ignored * ciclo}")
             stop_flag = True
             break
 
