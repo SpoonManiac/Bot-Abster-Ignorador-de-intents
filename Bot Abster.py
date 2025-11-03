@@ -77,7 +77,7 @@ def run(playwright):
 
     page.goto("https://app-us.cognigy.ai/project/664ceec434d705675ccfb939/68d4459ac3bf99944bb5eafc/trainer")
     page.wait_for_selector("button[aria-label*='Ignore']", timeout=60000)
-
+    
     #flow_name = input("Digite o nome exato do flow que deseja usar: ").strip()
     flow_name = "00.6 - Continuação [aux]"
     select_flow(page, flow_name)
@@ -99,8 +99,9 @@ def run(playwright):
             total = buttons.count()
             progress = False
 
+            # Se não tiver mais nada pra ignorar, para o bot
             if total == 0:
-                print("⚠️ Nenhum botão 'Ignore' encontrado. Finalizando processo...")
+                print("\n🏁 Nenhuma intent restante no flow. Encerrando automaticamente...")
                 stop_flag = True
                 break
 
@@ -121,11 +122,8 @@ def run(playwright):
                     btn.click(force=True, timeout=3000)
                     page.wait_for_timeout(500)
 
-                    # Agora medimos o progresso com base no botão Apply
                     current_apply_count = get_apply_count(page)
                     ignored_this_cycle = current_apply_count - start_count
-                    total_ignored = current_apply_count
-
                     print(f"✅ [{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}] Apply count atual: {current_apply_count}")
                     progress = True
 
@@ -144,19 +142,20 @@ def run(playwright):
 
         delta = get_apply_count(page) - start_count
         if delta > 0:
-            print(f"\n💾 {ciclo}° ciclo concluído — {delta} intents adicionadas ao Apply.")
-            print(f"\n🏁 Total de intents ignoradas desde o início: {total_ignored * ciclo}")
+            total_ignored += delta
+            print(f"\n💾 {ciclo}° ciclo concluído — {delta} intents ignoradas neste ciclo.")
+            print(f"📈 Total acumulado desde o início: {total_ignored}")
             apply_changes(page)
         else:
-            print(f"⚠️ Nenhuma intent nova para aplicar no {ciclo}° ciclo.")
-            print(f"\n🏁 Total de intents ignoradas desde o início: {total_ignored * ciclo}")
+            print(f"\n⚠️ Nenhuma intent nova para aplicar no {ciclo}° ciclo.")
+            print(f"🏁 Total geral de intents ignoradas: {total_ignored}")
             stop_flag = True
             break
 
         ciclo += 1
         page.wait_for_timeout(2000)
 
-    print("\n🏁 Processo finalizado.")
+    print(f"\n🏁 Processo finalizado com sucesso. Total geral de intents ignoradas: {total_ignored}")
     browser.close()
 
 if __name__ == "__main__":
