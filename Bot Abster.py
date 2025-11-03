@@ -13,6 +13,7 @@ def wait_for_stop():
     stop_flag = True
 
 def get_apply_count(page):
+    """Retorna o número dentro do botão Apply (ex: Apply (15) -> 15)"""
     try:
         btn = page.locator("button:has-text('Apply')").first
         if btn.is_visible():
@@ -24,6 +25,7 @@ def get_apply_count(page):
     return 0
 
 def is_selected_blue(page, btn):
+    """Verifica se o botão já está selecionado (fundo azul)"""
     try:
         color = btn.evaluate("el => window.getComputedStyle(el).backgroundColor")
         return '0, 97, 255' in color or 'rgb(0, 97, 255)' in color
@@ -31,10 +33,10 @@ def is_selected_blue(page, btn):
         return False
 
 def select_flow(page, flow_name):
-    print("🔍 Reduzindo zoom para 50% via PyAutoGUI...")
+    print("🔍 Reduzindo zoom para 33% via PyAutoGUI...")
     print("Você tem 6 segundos para clicar na aba do CHROME")
     time.sleep(6)
-    for _ in range(5):
+    for _ in range(6):
         pyautogui.hotkey('ctrl', '-')
         time.sleep(0.2)
 
@@ -47,8 +49,8 @@ def select_flow(page, flow_name):
     page.wait_for_timeout(3000)
     print(f"✅ Flow '{flow_name}' selecionado com sucesso!\n")
 
-
 def apply_changes(page):
+    """Clica no botão Apply para confirmar alterações"""
     try:
         apply_btn = page.locator("button:has-text('Apply')").first
         if apply_btn.is_visible():
@@ -76,11 +78,11 @@ def run(playwright):
     page.goto("https://app-us.cognigy.ai/project/664ceec434d705675ccfb939/68d4459ac3bf99944bb5eafc/trainer")
     page.wait_for_selector("button[aria-label*='Ignore']", timeout=60000)
 
-    flow_name = input("Digite o nome exato do flow que deseja usar: ").strip()
-    #flow_name = "00.6 - Continuação [aux]"
+    #flow_name = input("Digite o nome exato do flow que deseja usar: ").strip()
+    flow_name = "00.6 - Continuação [aux]"
     select_flow(page, flow_name)
 
-    max_to_ignore = 13
+    max_to_ignore = 21
     threading.Thread(target=wait_for_stop, daemon=True).start()
     ciclo = 1
     total_ignored = 0
@@ -88,7 +90,7 @@ def run(playwright):
     print("\n🚀 Iniciando processo contínuo de ignorar intents...\n")
 
     while not stop_flag:
-        print(f"\n📊 Iniciando {ciclo}° ciclo (meta: {max_to_ignore} ignores)...")
+        print(f"\n📊 Iniciando {ciclo}° ciclo (meta: {max_to_ignore} intents)...")
         start_count = get_apply_count(page)
         ignored_this_cycle = 0
 
@@ -119,10 +121,12 @@ def run(playwright):
                     btn.click(force=True, timeout=3000)
                     page.wait_for_timeout(500)
 
-                    ignored_this_cycle += 1
-                    total_ignored += 1
-                    new_count = get_apply_count(page)
-                    print(f"✅ [{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}] Intents ignorados neste ciclo: {ignored_this_cycle}")
+                    # Agora medimos o progresso com base no botão Apply
+                    current_apply_count = get_apply_count(page)
+                    ignored_this_cycle = current_apply_count - start_count
+                    total_ignored = current_apply_count
+
+                    print(f"✅ [{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}] Apply count atual: {current_apply_count}")
                     progress = True
 
                     if ignored_this_cycle >= max_to_ignore:
@@ -140,7 +144,8 @@ def run(playwright):
 
         delta = get_apply_count(page) - start_count
         if delta > 0:
-            print(f"\n💾 {ciclo}° ciclo concluído -- {ignored_this_cycle} de {max_to_ignore} intents ignoradas.\nTotal ignorados: {total_ignored}.\nAplicando mudanças...")
+            print(f"\n💾 {ciclo}° ciclo concluído — {delta} intents adicionadas ao Apply.")
+            print(f"Total acumulado no botão Apply: {get_apply_count(page)}")
             apply_changes(page)
         else:
             print(f"⚠️ Nenhuma intent nova para aplicar no {ciclo}° ciclo.")
@@ -153,7 +158,6 @@ def run(playwright):
 
     print("\n🏁 Processo finalizado.")
     browser.close()
-
 
 if __name__ == "__main__":
     with sync_playwright() as pw:
