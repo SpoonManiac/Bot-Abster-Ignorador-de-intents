@@ -75,8 +75,8 @@ def run(playwright):
     page.goto("https://app-us.cognigy.ai/project/664ceec434d705675ccfb939/68d4459ac3bf99944bb5eafc/trainer")
     page.wait_for_selector("button[aria-label*='Ignore']", timeout=60000)
 
-    #flow_name = input("Digite o nome exato do flow que deseja usar: ").strip()
-    flow_name = "00.6 - Continuação [aux]"
+    flow_name = input("Digite o nome exato do flow que deseja usar: ").strip()
+    #flow_name = "00.6 - Continuação [aux]"
     select_flow(page, flow_name)
 
     max_to_ignore = 13
