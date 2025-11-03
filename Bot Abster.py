@@ -32,7 +32,8 @@ def is_selected_blue(page, btn):
 
 def select_flow(page, flow_name):
     print("🔍 Reduzindo zoom para 50% via PyAutoGUI...")
-    time.sleep(1)
+    print("Você tem 6 segundos para clicar na aba do CHROME")
+    time.sleep(6)
     for _ in range(5):
         pyautogui.hotkey('ctrl', '-')
         time.sleep(0.2)
