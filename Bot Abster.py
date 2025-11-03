@@ -86,6 +86,7 @@ def run(playwright):
     threading.Thread(target=wait_for_stop, daemon=True).start()
     ciclo = 1
     total_ignored = 0
+    same_count_cycles = 0  # contador de ciclos sem progresso
 
     print("\n🚀 Iniciando processo contínuo de ignorar intents...\n")
 
@@ -93,6 +94,8 @@ def run(playwright):
         print(f"\n📊 Iniciando {ciclo}° ciclo (meta: {max_to_ignore} intents)...")
         start_count = get_apply_count(page)
         ignored_this_cycle = 0
+        same_count_in_cycle = 0
+        last_apply_count = start_count
 
         while not stop_flag and ignored_this_cycle < max_to_ignore:
             buttons = page.locator("button[aria-label*='Ignore']")
@@ -106,7 +109,7 @@ def run(playwright):
                 break
 
             for i in range(total):
-                if ignored_this_cycle >= max_to_ignore:
+                if stop_flag or ignored_this_cycle >= max_to_ignore:
                     break
 
                 btn = buttons.nth(i)
@@ -127,14 +130,23 @@ def run(playwright):
                     print(f"✅ [{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}] Apply count atual: {current_apply_count}")
                     progress = True
 
+                    # 🔹 Se o apply count não muda por 10 tentativas seguidas, encerra o ciclo
+                    if current_apply_count == last_apply_count:
+                        same_count_in_cycle += 1
+                    else:
+                        same_count_in_cycle = 0
+                        last_apply_count = current_apply_count
+
+                    if same_count_in_cycle >= 10:
+                        print("\n⚠️ Nenhum avanço detectado nas últimas 10 tentativas. Encerrando ciclo atual.")
+                        stop_flag = True
+                        break
+
                     if ignored_this_cycle >= max_to_ignore:
                         break
 
                 except:
                     continue
-
-            if ignored_this_cycle >= max_to_ignore:
-                break
 
             if not progress:
                 page.mouse.wheel(0, 400)
@@ -143,14 +155,17 @@ def run(playwright):
         delta = get_apply_count(page) - start_count
         if delta > 0:
             total_ignored += delta
+            same_count_cycles = 0
             print(f"\n💾 {ciclo}° ciclo concluído — {delta} intents ignoradas neste ciclo.")
             print(f"📈 Total acumulado desde o início: {total_ignored}")
             apply_changes(page)
         else:
-            print(f"\n⚠️ Nenhuma intent nova para aplicar no {ciclo}° ciclo.")
-            print(f"🏁 Total geral de intents ignoradas: {total_ignored}")
-            stop_flag = True
-            break
+            same_count_cycles += 1
+            print(f"\n⚠️ Nenhuma intent nova para aplicar no {ciclo}° ciclo. ({same_count_cycles} sem progresso)")
+            if same_count_cycles >= 3:
+                print(f"\n🏁 Nenhum progresso em 3 ciclos consecutivos. Encerrando o bot.")
+                stop_flag = True
+                break
 
         ciclo += 1
         page.wait_for_timeout(2000)
