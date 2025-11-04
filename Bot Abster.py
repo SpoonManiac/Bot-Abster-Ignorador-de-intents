@@ -48,7 +48,7 @@ def select_flow(page, flow_name, skip_zoom=False):
     page.keyboard.press("Enter")
     page.wait_for_timeout(3000)
     print(f"✅ Flow '{flow_name}' selecionado com sucesso!\n")
-    page.wait_for_timeout(5000)
+    page.wait_for_timeout(25000)
 
 def apply_changes(page):
     """Clica em Apply apenas se houver mudanças pendentes (valor > 0)"""
