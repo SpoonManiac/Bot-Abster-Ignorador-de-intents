@@ -1,10 +1,9 @@
 Bot está definido para ignorar 22 intents por ciclo
     - Demora em torno de 26s para completar 1 ciclo
     - Faz mais ou menos 51 intents em 1min
-
-em 1h ignora em torno de 138 ciclos totalizando 3.036 arquivos
-
+    - Em 1h ignora em torno de 138 ciclos totalizando 3.036 arquivos
 
 
 
-APOS O 15° (COM O ZOOM DE 33%) ELE COMEÇA A PULAR 1, NO 16° PULA 2, 17° PULA 3...
+
+APÓS O 15° (COM O ZOOM DE 33%) ELE COMEÇA A PULAR 1, NO 16° PULA 2, 17° PULA 3… (feito alterações para tratar esses problemas)
