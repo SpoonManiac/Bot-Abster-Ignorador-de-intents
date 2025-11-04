@@ -156,8 +156,15 @@ def run(playwright):
                         new_after_apply = get_apply_count(page)
                         if new_after_apply != last_apply_count:
                             print(f"🔁 Apply alterou contador: {last_apply_count} -> {new_after_apply}")
-                            last_apply_count = new_after_apply
-                            ignored_this_cycle = new_after_apply - start_count
+
+                            # Se o contador resetou para zero, significa que 'last_apply_count' intents foram aplicadas
+                            if new_after_apply == 0 and last_apply_count > 0:
+                                total_ignored += last_apply_count
+                            # Caso contrário, soma a diferença positiva
+                            elif new_after_apply > last_apply_count:
+                                total_ignored += new_after_apply - last_apply_count
+
+                            print(f"📈 Total de {total_ignored} intents ignoradas até agora.")
 
                         # agora sim: recarrega e reseleciona o flow
                         print("🌀 Site parece travado — recarregando trainer e reselecionando flow...")
