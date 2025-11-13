@@ -31,7 +31,7 @@ def is_selected_blue(page, btn):
         return False
 
 def select_flow(page, flow_name, skip_zoom=False):
-    """Seleciona o flow desejado"""
+    """Seleciona o flow desejado, priorizando a segunda opção (evita o '2')."""
     if not skip_zoom:
         print("🔍 Reduzindo zoom para 33% via PyAutoGUI...")
         print("Você tem 6 segundos para clicar na aba do CHROME")
@@ -45,10 +45,48 @@ def select_flow(page, flow_name, skip_zoom=False):
     flow_input = page.locator("#flowSelectId")
     flow_input.click()
     page.fill("#flowSelectId", flow_name)
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(3000)
-    print(f"✅ Flow '{flow_name}' selecionado com sucesso!\n")
+
+    # Espera o dropdown aparecer (Material UI geralmente usa div[role='presentation'])
+    page.wait_for_selector("div[role='presentation'] ul[role='listbox'] li", timeout=10000)
+
+    # Captura todas as opções
+    options = page.locator("div[role='presentation'] ul[role='listbox'] li")
+    total = options.count()
+
+    if total == 0:
+        print("❌ Nenhuma opção encontrada no dropdown!")
+        return
+
+    print(f"📋 {total} opção(ões) encontrada(s):")
+    for i in range(total):
+        try:
+            text = options.nth(i).inner_text().strip()
+            print(f"   {i+1}. {text}")
+        except:
+            pass
+
+    # Procura a primeira opção que seja exatamente igual ou não contenha "2"
+    chosen_index = None
+    for i in range(total):
+        try:
+            text = options.nth(i).inner_text().strip()
+            if text == flow_name:
+                chosen_index = i
+                break
+        except:
+            continue
+
+    # Se não achar igual, tenta a segunda opção
+    if chosen_index is None and total > 1:
+        chosen_index = 1
+        print("⚠️ Nenhuma correspondência exata — clicando na 2ª opção.")
+    elif chosen_index is None:
+        chosen_index = 0
+
+    options.nth(chosen_index).click()
+    print(f"✅ Flow '{flow_name}' selecionado com sucesso! (opção {chosen_index + 1})\n")
     page.wait_for_timeout(25000)
+
 
 def apply_changes(page):
     """Clica em Apply apenas se houver mudanças pendentes (valor > 0)"""

@@ -1,0 +1,20 @@
+00 - Gerador de tokens [aux]
+00.7 - Encerramento do atendimento [aux]
+11 - QnA Maker (Perguntas e respostas)
+00.6 - Continuação [aux]
+00.2 - Protocolo [aux]
+00.3 - Análise de mensagem [aux]
+00.3.1 - Intent Rerank [aux]
+00.4 - MARA (Módulo de Autorização e Roteamento de Atendimento)
+00.4.1 - Analise de cliente (On-Off) [aux]
+00.4.2 - Definição do produto [aux]
+00.4.2.1 - Histórico de identificação [aux]
+00.4.2.1.1 - Reset de perfil [aux]
+00.4.2.2 - Tratamento de cidade [aux]
+00.4.2.3 - Captura de documento [aux]
+00.4.2.4 - Busca de dados no cadUni [aux]
+00.4.3 - Tratamento final [aux]
+
+"05.1 - Filtro de sub-intenções",
+    "00.4.2.9 - Identificação de Imobiliária",
+    "00.5 - MADU (Módulo de Atualização de Dados do Usuário)"

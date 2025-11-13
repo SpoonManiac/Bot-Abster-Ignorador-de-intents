@@ -1,0 +1,56 @@
+Flows para ignorar
+
+	MTOS INTENTS (+1K)
+05 - Filtro de intenções
+Mari - AI Agent
+11 - QnA Maker (Perguntas e respostas)
+00.9.1.2 - Atualiza DB Release
+00.9.2 - Analytics
+00.5 - Captura dados Zendesk [aux]
+
+
+
+	NEM TANTOS (-1k)
+06.1.1 - Falta d'água (Solicitação)
+
+
+
+	FILA NEM TANTOS (-1k)
+06.1.3 - Falta d'água (Massiva)
+06.1.4 - Falta d'água (Confirmação de Solicitação)
+06.6.3 - Captura de informação para TDT
+06.6.3.1 - Menu de documentação do imóvel (TDT)
+
+
+
+
+	FILA MTOS (+1K)
+
+
+
+
+
+SAMARA RODANDO
+00.8 - Primeira Mensagem(Sunco)[aux]
+01 - Validação de canal de atendimento - (Fluxo inicial)
+06.6.3.2 - Verificação de débitos (matrícula)
+06.5.2.1 - Vazamento (Público) - ArcGIS
+
+
+2° PC RODANDO
+00.4.2 - Definição do produto [aux]
+00.4.2.1 - Histórico de identificação [aux]
+00.4.2.3 - Captura de documento [aux]
+00.4.2.4 - Busca de dados no cadUni [aux]
+
+
+05 - Filtro de intenções
+05.1 - Filtro de sub-intenções
+
+
+
+JA FORAM
+12 - Knowledge AI
+00.6.4 - Coleta novo cliente [aux]
+Mari - AI Agent
+13.2 - Escalação humana (Captura de dados)
